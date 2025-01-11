@@ -6,4 +6,4 @@ Feel free to confess.
 
 Don't worry even i can't know your identity.
 
-Link : https://https.uvce-confessions.vercel.app/
+Link : https://uvce-confessions.vercel.app/
