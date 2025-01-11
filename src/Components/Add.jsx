@@ -6,7 +6,7 @@ const Add = ({ closeAdd }) => {
     const [confessLength, setconfessLength] = useState(confess.length)
     const [isLoading, setIsLoading] = useState(false);
     const [hCaptchaToken, setHCaptchaToken] = useState('');
-
+    const API_URL = import.meta.env.VITE_URL;
     const handleInputChange = (event) => {
         if(event.target.value.length<=350){
             setconfessLength(event.target.value.length)
@@ -31,7 +31,7 @@ const Add = ({ closeAdd }) => {
 
         setIsLoading(true);
         try {
-            const response = await fetch('https://secret213.vercel.app/confessions', {
+            const response = await fetch(`${API_URL}/confessions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

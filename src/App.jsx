@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Confession from './Components/Confession';
 import Add from './Components/Add';
+import Comment from './Components/Comment';
 
 function App() {
   const [confessions, setConfessions] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [showAdd, setshowAdd] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [count, setcount] = useState("...")
+  const [count, setcount] = useState("...");
+  const [showcomment, setShowComment] = useState(false);
+  const [commentId, setCommentId] = useState('')
   async function getConfessions() {
+    const API_URL = import.meta.env.VITE_URL;
     try {
-      const res = await fetch(`https://secret213.vercel.app/confessions?page=${currentPage}`);
+      const res = await fetch(`${API_URL}/confessions?page=${currentPage}`);
       const data = await res.json();
       setConfessions((prevConfessions) => [...prevConfessions, ...data.confessions]);
       setcount(data.pagination.totalConfessions)
@@ -23,8 +27,14 @@ function App() {
     }
   }
 
+  function handleCommentOpen(id) {
+    setCommentId(id)
+    setShowComment(true)
+  }
+
   useEffect(() => {
     getConfessions();
+    
   }, [currentPage]);
 
   const fetchMoreData = () => {
@@ -36,8 +46,8 @@ function App() {
       <header className="z-30 text-center text-3xl m-auto fixed w-full p-5 bg-neutral-900 text-purple-500">
         <h1>UVCE CONFESSIONS</h1>
       </header>
-      
-      <div className="py-24 p-8 sm:p-24 flex flex-col items-center">
+        {showcomment && <Comment id={commentId} onCloseComment={() => setShowComment(false)}/>}
+      <div className="py-[76px] px-8 sm:p-24 flex flex-col items-center">
         <p className='text-xl my-2'>Total Confessions : {count}</p>
       <div className="add">
       {showAdd ? (
@@ -61,7 +71,7 @@ function App() {
         >
           <div className="flex flex-wrap justify-center gap-4 w-full">
             {confessions.map((confession) => (
-              <Confession key={confession._id} text={confession.text} createdAt={confession.createdAt} likes={confession.likes} />
+              <Confession key={confession._id} onComment={()=>handleCommentOpen(confession._id)} text={confession.text} createdAt={confession.createdAt} likes={confession.likes} />
             ))}
           </div>
         </InfiniteScroll>
