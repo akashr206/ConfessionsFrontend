@@ -15,6 +15,7 @@ function App() {
   async function getConfessions() {
     const API_URL = import.meta.env.VITE_URL;
     try {
+      console.log(API_URL);
       const res = await fetch(`${API_URL}/confessions?page=${currentPage}`);
       const data = await res.json();
       setConfessions((prevConfessions) => [...prevConfessions, ...data.confessions]);
